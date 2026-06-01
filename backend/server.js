@@ -8,7 +8,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: process.env.CLIENT_URL || ["http://localhost:5173", "http://localhost:8080"] }));
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "https://green-bush-0e6ed2400.7.azurestaticapps.net",
+  "http://localhost:5173",
+  "http://localhost:8080",
+].filter(Boolean);
+
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 // Health check
