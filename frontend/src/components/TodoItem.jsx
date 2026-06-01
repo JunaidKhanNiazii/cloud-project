@@ -30,7 +30,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
 
   return (
     <div
-      className={`group bg-white rounded-2xl border shadow-sm p-4 transition-all hover:shadow-md ${
+      className={`group bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-4 transition-all hover:shadow-md ${
         todo.completed ? "opacity-60" : ""
       }`}
     >
@@ -40,13 +40,13 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-400 text-sm text-slate-700"
+            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-400 text-sm text-slate-700 dark:text-slate-200"
           />
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
-            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-400 text-sm text-slate-500 resize-none"
+            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-400 text-sm text-slate-500 dark:text-slate-400 resize-none"
           />
           <div className="flex gap-2 justify-end">
             <button onClick={() => setEditing(false)} className="px-3 py-1 text-xs text-slate-500 hover:text-slate-700">
@@ -78,11 +78,11 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <p className={`text-sm font-medium text-slate-700 truncate ${todo.completed ? "line-through text-slate-400" : ""}`}>
+            <p className={`text-sm font-medium text-slate-700 dark:text-slate-200 truncate ${todo.completed ? "line-through text-slate-400" : ""}`}>
               {todo.title}
             </p>
             {todo.description && (
-              <p className="text-xs text-slate-400 mt-0.5 truncate">{todo.description}</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 truncate">{todo.description}</p>
             )}
             <div className="flex items-center gap-2 mt-2">
               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border ${priorityStyles[todo.priority]}`}>

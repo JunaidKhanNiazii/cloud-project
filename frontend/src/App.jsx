@@ -3,6 +3,8 @@ import { todoApi } from "./api/todoApi";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
 import TodoFilter from "./components/TodoFilter";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export default function App() {
   const [todos, setTodos] = useState([]);
@@ -10,6 +12,13 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [darkMode, setDarkMode] = useState(() =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
 
   useEffect(() => {
     todoApi
@@ -76,42 +85,26 @@ export default function App() {
     [todos]
   );
 
-  const completedPercent = todos.length ? Math.round((counts.completed / todos.length) * 100) : 0;
+  const completedPercent = todos.length
+    ? Math.round((counts.completed / todos.length) * 100)
+    : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50 to-slate-100">
-      <div className="max-w-2xl mx-auto px-4 py-12">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-violet-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 transition-colors duration-300">
 
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-8 h-8 bg-violet-600 rounded-xl flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h1 className="text-2xl font-bold text-slate-800">My Tasks</h1>
-          </div>
-          <p className="text-sm text-slate-400 ml-11">
-            {counts.completed} of {todos.length} tasks completed
-          </p>
+      <Header
+        darkMode={darkMode}
+        toggleDark={() => setDarkMode((d) => !d)}
+        counts={counts}
+        completedPercent={completedPercent}
+        total={todos.length}
+      />
 
-          {/* Progress bar */}
-          {todos.length > 0 && (
-            <div className="mt-3 ml-11">
-              <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-violet-500 rounded-full transition-all duration-500"
-                  style={{ width: `${completedPercent}%` }}
-                />
-              </div>
-            </div>
-          )}
-        </div>
+      <main className="flex-1 w-full max-w-3xl mx-auto px-4 py-8">
 
         {/* Error banner */}
         {error && (
-          <div className="mb-4 px-4 py-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600 flex items-center justify-between">
+          <div className="mb-4 px-4 py-3 bg-red-50 dark:bg-red-900/30 border border-red-100 dark:border-red-800 rounded-xl text-sm text-red-600 dark:text-red-400 flex items-center justify-between">
             {error}
             <button onClick={() => setError(null)} className="text-red-400 hover:text-red-600 ml-4">✕</button>
           </div>
@@ -133,7 +126,7 @@ export default function App() {
               placeholder="Search tasks…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-400"
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-400"
             />
           </div>
           <TodoFilter current={filter} onChange={setFilter} counts={counts} />
@@ -145,8 +138,8 @@ export default function App() {
             <div className="w-8 h-8 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin" />
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-16 text-slate-400">
-            <svg className="w-12 h-12 mx-auto mb-3 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="text-center py-16 text-slate-400 dark:text-slate-500">
+            <svg className="w-12 h-12 mx-auto mb-3 text-slate-200 dark:text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
             <p className="text-sm">{search ? "No tasks match your search." : "No tasks here. Add one above."}</p>
@@ -164,7 +157,9 @@ export default function App() {
             ))}
           </div>
         )}
-      </div>
+      </main>
+
+      <Footer counts={counts} />
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function TodoFilter({ current, onChange, counts }) {
           className={`px-4 py-1.5 rounded-full text-sm font-medium capitalize transition-all ${
             current === f
               ? "bg-violet-600 text-white shadow-sm"
-              : "bg-white text-slate-500 hover:bg-slate-100 border border-slate-200"
+              : "bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600"
           }`}
         >
           {f}
