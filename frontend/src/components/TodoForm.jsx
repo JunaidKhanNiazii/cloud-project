@@ -1,21 +1,34 @@
 import { useState } from "react";
 
-const PRIORITIES = ["low", "medium", "high"];
+const PRIORITIES = [
+  { label: "1 - High", value: 1, color: "bg-red-100 text-red-600 ring-red-300" },
+  { label: "2 - Medium", value: 2, color: "bg-amber-100 text-amber-600 ring-amber-300" },
+  { label: "3 - Low", value: 3, color: "bg-green-100 text-green-600 ring-green-300" },
+];
 
 export default function TodoForm({ onAdd }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState("medium");
+  const [priorityNum, setPriorityNum] = useState(2);
+  const [dueDate, setDueDate] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
     setLoading(true);
-    await onAdd({ title, description, priority });
+    const priorityMap = { 1: "high", 2: "medium", 3: "low" };
+    await onAdd({
+      title,
+      description,
+      priority: priorityMap[priorityNum],
+      priority_num: priorityNum,
+      due_date: dueDate || null,
+    });
     setTitle("");
     setDescription("");
-    setPriority("medium");
+    setPriorityNum(2);
+    setDueDate("");
     setLoading(false);
   };
 
@@ -40,27 +53,32 @@ export default function TodoForm({ onAdd }) {
         className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-400 text-slate-700 placeholder-slate-400 text-sm resize-none"
       />
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
+        {/* Numeric priority */}
         <div className="flex gap-2">
           {PRIORITIES.map((p) => (
             <button
-              key={p}
+              key={p.value}
               type="button"
-              onClick={() => setPriority(p)}
-              className={`px-3 py-1 rounded-full text-xs font-medium capitalize transition-all ${
-                priority === p
-                  ? p === "high"
-                    ? "bg-red-100 text-red-600 ring-2 ring-red-300"
-                    : p === "medium"
-                    ? "bg-amber-100 text-amber-600 ring-2 ring-amber-300"
-                    : "bg-green-100 text-green-600 ring-2 ring-green-300"
+              onClick={() => setPriorityNum(p.value)}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                priorityNum === p.value
+                  ? `${p.color} ring-2`
                   : "bg-slate-100 text-slate-400 hover:bg-slate-200"
               }`}
             >
-              {p}
+              {p.label}
             </button>
           ))}
         </div>
+
+        {/* Due date */}
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          className="px-3 py-1.5 rounded-xl border border-slate-200 text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-400"
+        />
 
         <button
           type="submit"
