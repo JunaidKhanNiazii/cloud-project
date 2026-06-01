@@ -1,6 +1,10 @@
 # cloud-project
 
-A full-stack Todo application with Node.js backend and React frontend.
+A full-stack Todo application with Node.js backend and React frontend, deployed on Azure.
+
+## Live URLs
+- Frontend (Static Web App): https://green-bush-0e6ed2400.7.azurestaticapps.net
+- Backend (App Service): https://app-taskapp-backend-junaid-a8fjgwc6gmapfzfw.eastasia-01.azurewebsites.net/api/health
 
 ## Branches
 - `main` — production-ready code
@@ -10,6 +14,27 @@ A full-stack Todo application with Node.js backend and React frontend.
 
 ## Git Flow
 All features branch from `develop`, get merged back via PR, then released to `main`.
+
+## Azure Resources
+| Resource | Name |
+|---|---|
+| Resource Group | rg-taskapp-student-junaid1 |
+| Container Registry | acrtaskappjunaid |
+| SQL Database | db-taskapp1 (sql-taskapp-junaid) |
+| App Service | app-taskapp-backend-junaid |
+| Static Web App | stapp-taskapp-frontend |
+| Azure DevOps | devops-training-junaid / taskapp-cicd |
+
+## Completion Checklist
+- [x] Forked GitHub Repo with Git Flow branches
+- [x] Dockerfiles committed for backend and frontend
+- [x] Docker images pushed to ACR (taskapp-backend, taskapp-frontend)
+- [x] Azure SQL Database running with todos table
+- [x] App Service backend deployed — /api/health returns 200
+- [x] Static Web App frontend live and calling backend API
+- [x] End-to-end: create task in UI → saved to Azure SQL
+- [x] Azure DevOps CI/CD pipeline — Build + Deploy stages green
+- [x] No secrets in committed code — .env in .gitignore
 
 ---
 
