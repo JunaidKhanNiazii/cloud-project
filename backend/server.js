@@ -1,9 +1,11 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import todoRoutes from "./routes/todoRoutes.js";
 
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  const { default: dotenv } = await import("dotenv");
+  dotenv.config();
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;

@@ -14,6 +14,6 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY . .
 
-EXPOSE 5005
+EXPOSE 80
 
 CMD ["node", "server.js"]
