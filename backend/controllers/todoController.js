@@ -22,11 +22,11 @@ export const todoController = {
 
   create: async (req, res) => {
     try {
-      const { title, description, priority } = req.body;
+      const { title, description, priority, priority_num, due_date } = req.body;
       if (!title?.trim()) {
         return res.status(400).json({ success: false, message: "Title is required" });
       }
-      const todo = await TodoModel.create({ title: title.trim(), description, priority });
+      const todo = await TodoModel.create({ title: title.trim(), description, priority, priority_num, due_date });
       res.status(201).json({ success: true, data: todo });
     } catch (err) {
       res.status(500).json({ success: false, message: err.message });

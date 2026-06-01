@@ -87,9 +87,14 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
             <div className="flex items-center gap-2 mt-2">
               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border ${priorityStyles[todo.priority]}`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${priorityDot[todo.priority]}`} />
-                {todo.priority}
+                {todo.priority_num ? `${todo.priority_num} - ` : ""}{todo.priority}
               </span>
               <span className="text-xs text-slate-300">{date}</span>
+              {todo.due_date && (
+                <span className="text-xs text-violet-400 font-medium">
+                  Due: {new Date(todo.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                </span>
+              )}
             </div>
           </div>
 

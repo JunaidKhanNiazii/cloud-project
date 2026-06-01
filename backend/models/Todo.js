@@ -16,16 +16,18 @@ export const TodoModel = {
     return result.recordset[0] || null;
   },
 
-  create: async ({ title, description, priority }) => {
+  create: async ({ title, description, priority, priority_num, due_date }) => {
     const pool = await getPool();
     const result = await pool.request()
       .input("title", sql.NVarChar, title)
       .input("description", sql.NVarChar, description ?? "")
       .input("priority", sql.NVarChar, priority ?? "medium")
+      .input("priority_num", sql.Int, priority_num ?? 2)
+      .input("due_date", sql.Date, due_date ?? null)
       .query(`
-        INSERT INTO todos (title, description, completed, priority, created_at, updated_at)
+        INSERT INTO todos (title, description, completed, priority, priority_num, due_date, created_at, updated_at)
         OUTPUT INSERTED.*
-        VALUES (@title, @description, 0, @priority, GETDATE(), GETDATE())
+        VALUES (@title, @description, 0, @priority, @priority_num, @due_date, GETDATE(), GETDATE())
       `);
     return result.recordset[0];
   },
@@ -53,7 +55,14 @@ export const TodoModel = {
       setClauses.push("priority = @priority");
     }
 
-    if (setClauses.length === 0) return null;
+    if (fields.priority_num !== undefined) {
+      request.input("priority_num", sql.Int, fields.priority_num);
+      setClauses.push("priority_num = @priority_num");
+    }
+    if (fields.due_date !== undefined) {
+      request.input("due_date", sql.Date, fields.due_date ?? null);
+      setClauses.push("due_date = @due_date");
+    }
 
     const result = await request.query(`
       UPDATE todos
